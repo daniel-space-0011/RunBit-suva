@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Terminal, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Session } from "@supabase/supabase-js";
 
 interface NavbarProps {
-  session?: boolean;
-  onLogout?: () => void;
+  session: Session | null;
+  onLogout: () => void;
 }
 
 const navLinks = [
@@ -15,7 +16,7 @@ const navLinks = [
   { name: "Pricing", path: "/pricing" },
 ];
 
-const Navbar = ({ session = false, onLogout }: NavbarProps) => {
+const Navbar = ({ session, onLogout }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 

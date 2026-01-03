@@ -4,11 +4,31 @@ import LanguageCards from "@/components/home/LanguageCards";
 import Features from "@/components/home/Features";
 import SocialProof from "@/components/home/SocialProof";
 import Footer from "@/components/layout/Footer";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const { session, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Logout failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar session={session} onLogout={handleLogout} />
       <main className="flex-1">
         <Hero />
         <LanguageCards />

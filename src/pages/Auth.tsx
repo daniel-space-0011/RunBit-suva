@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, Terminal, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { z } from "zod";
+
+const emailSchema = z.string().email("Please enter a valid email address");
+const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isSignUp = searchParams.get("signup") === "true";
+  const { session, signUp, signIn, signInWithGoogle } = useAuth();
 
   const [mode, setMode] = useState<"login" | "signup">(isSignUp ? "signup" : "login");
   const [email, setEmail] = useState("");
@@ -16,13 +22,33 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (session) {
+      navigate("/");
+    }
+  }, [session, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    // Validate email
+    const emailResult = emailSchema.safeParse(email);
+    if (!emailResult.success) {
       toast({
-        title: "Error",
-        description: "Please fill in all fields",
+        title: "Invalid email",
+        description: emailResult.error.errors[0].message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate password
+    const passwordResult = passwordSchema.safeParse(password);
+    if (!passwordResult.success) {
+      toast({
+        title: "Invalid password",
+        description: passwordResult.error.errors[0].message,
         variant: "destructive",
       });
       return;
@@ -39,17 +65,74 @@ const Auth = () => {
 
     setIsLoading(true);
 
-    // Simulate auth - replace with Supabase later
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      if (mode === "signup") {
+        const { error } = await signUp(email, password);
+        if (error) {
+          if (error.message.includes("already registered")) {
+            toast({
+              title: "Account exists",
+              description: "This email is already registered. Please sign in instead.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Sign up failed",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
+        } else {
+          toast({
+            title: "Account created!",
+            description: "You have been signed in successfully.",
+          });
+          navigate("/");
+        }
+      } else {
+        const { error } = await signIn(email, password);
+        if (error) {
+          if (error.message.includes("Invalid login credentials")) {
+            toast({
+              title: "Login failed",
+              description: "Invalid email or password. Please try again.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Login failed",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
+        } else {
+          toast({
+            title: "Welcome back!",
+            description: "You have successfully logged in.",
+          });
+          navigate("/");
+        }
+      }
+    } catch (error) {
       toast({
-        title: mode === "login" ? "Welcome back!" : "Account created!",
-        description: mode === "login" 
-          ? "You have successfully logged in."
-          : "Please check your email to verify your account.",
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
       });
-      navigate("/");
-    }, 1500);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const { error } = await signInWithGoogle();
+    if (error) {
+      toast({
+        title: "Google login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -165,7 +248,7 @@ const Auth = () => {
             type="button"
             variant="outline"
             className="w-full h-12"
-            onClick={() => toast({ title: "Coming soon", description: "Google login will be available after Supabase integration." })}
+            onClick={handleGoogleLogin}
           >
             <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
               <path
