@@ -5,15 +5,34 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import { getLanguageConfig } from "@/lib/languages";
 import { executeCode, ExecutionResult } from "@/lib/piston";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 const Compiler = () => {
   const { language = "python" } = useParams<{ language: string }>();
   const config = getLanguageConfig(language);
+  const { session, signOut } = useAuth();
   
   const [code, setCode] = useState(config.defaultCode);
   const [result, setResult] = useState<ExecutionResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Logout failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      });
+    }
+  };
 
   // Update code when language changes
   useEffect(() => {
@@ -105,7 +124,7 @@ const Compiler = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
+      <Navbar session={session} onLogout={handleLogout} />
       
       {/* Toolbar */}
       <div className="border-b border-border bg-card">
