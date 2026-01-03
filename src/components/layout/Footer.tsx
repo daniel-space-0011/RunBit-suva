@@ -68,7 +68,7 @@ const Footer = () => {
             <ul className="space-y-2.5">
               <li>
                 <Link
-                  to="/docs"
+                  to="/documentation"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Documentation
@@ -76,7 +76,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/api"
+                  to="/api-docs"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   API Reference

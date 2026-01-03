@@ -12,7 +12,7 @@ interface NavbarProps {
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "Compiler", path: "/compiler/python" },
-  { name: "Docs", path: "/docs" },
+  { name: "Docs", path: "/documentation" },
   { name: "Pricing", path: "/pricing" },
 ];
 
