@@ -1,26 +1,20 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 interface CodeEditorProps {
   code: string;
   onChange: (code: string) => void;
   onRun: () => void;
-  languageName: string;
+  extension: string;
 }
 
-const CodeEditor = ({ code, onChange, onRun, languageName }: CodeEditorProps) => {
+const CodeEditor = ({ code, onChange, onRun, extension }: CodeEditorProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const lineNumbersRef = useRef<HTMLDivElement>(null);
-
-  const lines = code.split("\n");
-  const lineCount = lines.length;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Run on Ctrl+Enter or Cmd+Enter
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
       e.preventDefault();
       onRun();
     }
-    // Handle Tab key for indentation
     if (e.key === "Tab") {
       e.preventDefault();
       const target = e.target as HTMLTextAreaElement;
@@ -28,47 +22,27 @@ const CodeEditor = ({ code, onChange, onRun, languageName }: CodeEditorProps) =>
       const end = target.selectionEnd;
       const newCode = code.substring(0, start) + "  " + code.substring(end);
       onChange(newCode);
-      // Restore cursor position
       setTimeout(() => {
         target.selectionStart = target.selectionEnd = start + 2;
       }, 0);
     }
   };
 
-  const handleScroll = () => {
-    if (textareaRef.current && lineNumbersRef.current) {
-      lineNumbersRef.current.scrollTop = textareaRef.current.scrollTop;
-    }
-  };
-
   return (
-    <div className="flex flex-col">
-      <div className="px-4 py-2 bg-muted/50 border-b border-border">
-        <span className="text-sm font-medium text-muted-foreground">
-          Code Editor - {languageName}
-        </span>
-      </div>
-      <div className="flex flex-1 min-h-[300px] lg:min-h-[400px]">
-        {/* Line Numbers */}
-        <div
-          ref={lineNumbersRef}
-          className="bg-[hsl(220,13%,12%)] text-muted-foreground font-mono text-sm py-4 px-3 select-none overflow-hidden border-r border-border/50"
-          style={{ minWidth: "3rem" }}
-        >
-          {Array.from({ length: lineCount }, (_, i) => (
-            <div key={i + 1} className="leading-6 text-right">
-              {i + 1}
-            </div>
-          ))}
+    <div className="mx-4 mt-4">
+      <div className="border border-border rounded-lg overflow-hidden bg-card">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border-b border-border">
+          <span className="text-sm font-medium text-foreground">Code</span>
+          <span className="text-sm text-muted-foreground">main.{extension}</span>
         </div>
-        {/* Code Input */}
+        {/* Editor */}
         <textarea
           ref={textareaRef}
           value={code}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          onScroll={handleScroll}
-          className="flex-1 p-4 bg-[hsl(220,13%,10%)] text-[hsl(220,9%,90%)] font-mono text-sm resize-none focus:outline-none leading-6"
+          className="w-full min-h-[200px] p-4 bg-card text-foreground font-mono text-sm resize-none focus:outline-none"
           spellCheck={false}
           placeholder="Write your code here..."
         />

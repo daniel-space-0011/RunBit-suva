@@ -124,12 +124,12 @@ const Compiler = () => {
       />
 
       {/* Editor and Output */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 max-w-7xl mx-auto w-full">
         <CodeEditor
           code={code}
           onChange={setCode}
           onRun={handleRun}
-          languageName={config.name}
+          extension={config.extension}
         />
         <OutputPanel
           result={result}
