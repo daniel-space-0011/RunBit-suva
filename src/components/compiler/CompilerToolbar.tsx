@@ -1,7 +1,8 @@
-import { Play, Download, RotateCcw, Copy, Loader2 } from "lucide-react";
+import { Play, RotateCcw, Download, Copy, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageConfig } from "@/lib/languages";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface CompilerToolbarProps {
   config: LanguageConfig;
@@ -20,6 +21,8 @@ const CompilerToolbar = ({
   onReset,
   onDownload,
 }: CompilerToolbarProps) => {
+  const navigate = useNavigate();
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(code);
@@ -56,54 +59,55 @@ const CompilerToolbar = ({
       css: "css3",
       react: "react",
       nodejs: "nodejs",
+      mysql: "mysql",
+      postgresql: "postgresql",
+      mongodb: "mongodb",
+      sqlite: "sqlite",
     };
     return iconMap[slug] || slug;
   };
 
   return (
-    <div className="border-b border-border bg-card px-4 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img
-            src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-original.svg`}
-            alt={config.name}
-            className="h-6 w-6"
-            onError={(e) => {
-              e.currentTarget.src = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-plain.svg`;
-            }}
-          />
-          <span className="font-medium text-foreground">{config.name}</span>
-          <span className="text-xs text-muted-foreground">
-            v{config.pistonVersion}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
+    <div className="border-b border-border bg-background px-4 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Left: Back + Language */}
+        <div className="flex items-center gap-4">
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={onReset}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            title="Reset"
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="gap-2"
           >
-            <RotateCcw className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" />
+            Back
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleCopy}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            title="Copy"
-          >
+
+          <div className="flex items-center gap-3">
+            <img
+              src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-original.svg`}
+              alt={config.name}
+              className="h-8 w-8"
+              onError={(e) => {
+                e.currentTarget.src = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-plain.svg`;
+              }}
+            />
+            <div>
+              <h1 className="text-lg font-semibold text-foreground">{config.name}</h1>
+              <p className="text-xs text-muted-foreground">v{config.pistonVersion}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={onDownload} title="Download">
+            <Download className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={handleCopy} title="Copy">
             <Copy className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onDownload}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            title="Download"
-          >
-            <Download className="h-4 w-4" />
+          <Button variant="ghost" size="icon" onClick={onReset} title="Reset">
+            <RotateCcw className="h-4 w-4" />
           </Button>
           <Button
             variant="run"
