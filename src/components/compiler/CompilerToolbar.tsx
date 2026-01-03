@@ -68,10 +68,65 @@ const CompilerToolbar = ({
   };
 
   return (
-    <div className="border-b border-border bg-background px-4 py-3">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Left: Back + Language */}
-        <div className="flex items-center gap-4">
+    <div className="border-b border-border bg-background px-3 sm:px-4 py-3 max-w-full overflow-x-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* Mobile: Top row with Back and Run */}
+        <div className="flex items-center justify-between sm:hidden">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <Button
+            variant="run"
+            size="sm"
+            onClick={onRun}
+            disabled={isRunning}
+          >
+            {isRunning ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Play className="h-4 w-4 mr-2" />
+            )}
+            Run
+          </Button>
+        </div>
+
+        {/* Mobile: Second row with language info and icons */}
+        <div className="flex items-center justify-between sm:hidden">
+          <div className="flex items-center gap-2">
+            <img
+              src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-original.svg`}
+              alt={config.name}
+              className="h-6 w-6"
+              onError={(e) => {
+                e.currentTarget.src = `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${getLanguageIcon(config.slug)}/${getLanguageIcon(config.slug)}-plain.svg`;
+              }}
+            />
+            <div>
+              <h1 className="text-sm font-semibold text-foreground">{config.name}</h1>
+              <p className="text-xs text-muted-foreground">v{config.pistonVersion}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" onClick={onDownload} title="Download" className="h-10 w-10">
+              <Download className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handleCopy} title="Copy" className="h-10 w-10">
+              <Copy className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onReset} title="Reset" className="h-10 w-10">
+              <RotateCcw className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop: Single row layout */}
+        <div className="hidden sm:flex items-center gap-4">
           <Button
             variant="outline"
             size="sm"
@@ -98,8 +153,8 @@ const CompilerToolbar = ({
           </div>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2">
+        {/* Desktop: Actions */}
+        <div className="hidden sm:flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={onDownload} title="Download">
             <Download className="h-4 w-4" />
           </Button>
