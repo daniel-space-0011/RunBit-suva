@@ -11,6 +11,7 @@ import ApiDocs from "./pages/ApiDocs";
 import Examples from "./pages/Examples";
 import Tutorials from "./pages/Tutorials";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/examples" element={<Examples />} />
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
