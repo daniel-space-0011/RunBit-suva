@@ -114,9 +114,11 @@ const Blog = () => {
                       {featuredPost.date}
                     </span>
                   </div>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    Read More
-                    <ArrowRight className="h-4 w-4" />
+                  <Button variant="outline" size="sm" className="gap-2" asChild>
+                    <Link to={`/blog/${featuredPost.id}`}>
+                      Read More
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -128,9 +130,10 @@ const Blog = () => {
             <h2 className="text-2xl font-bold text-foreground mb-8">Recent Posts</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {recentPosts.map((post) => (
-                <article
+                <Link
                   key={post.id}
-                  className="rounded-xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all group"
+                  to={`/blog/${post.id}`}
+                  className="block rounded-xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all group"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <Badge variant="secondary">{post.category}</Badge>
@@ -158,7 +161,7 @@ const Blog = () => {
                       {post.date}
                     </span>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           </section>
