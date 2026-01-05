@@ -3,6 +3,7 @@ import Hero from "@/components/home/Hero";
 import LanguageCards from "@/components/home/LanguageCards";
 import Features from "@/components/home/Features";
 import SocialProof from "@/components/home/SocialProof";
+import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
@@ -34,6 +35,7 @@ const Index = () => {
         <LanguageCards />
         <Features />
         <SocialProof />
+        <Newsletter />
       </main>
       <Footer />
     </div>
