@@ -21,10 +21,10 @@ const universities = [
 ];
 
 const stats = [
-  { value: "2M+", label: "Active Developers", icon: Users },
-  { value: "500+", label: "Companies", icon: Building2 },
-  { value: "50M+", label: "Lines Compiled", icon: Code2 },
-  { value: "180+", label: "Countries", icon: Globe },
+  { value: "2M+", label: "Active Developers", icon: Users, color: "text-primary", bgColor: "bg-accent" },
+  { value: "500+", label: "Companies", icon: Building2, color: "text-secondary", bgColor: "bg-secondary/10" },
+  { value: "50M+", label: "Lines Compiled", icon: Code2, color: "text-orange-500", bgColor: "bg-orange-50" },
+  { value: "180+", label: "Countries", icon: Globe, color: "text-yellow-500", bgColor: "bg-yellow-50" },
 ];
 
 const SocialProof = () => {
@@ -62,11 +62,11 @@ const SocialProof = () => {
               className="group relative"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="relative bg-card/60 backdrop-blur-sm border border-border/40 rounded-2xl p-6 text-center hover:border-border transition-all duration-300 hover:-translate-y-1 hover:shadow-sm">
-                <div className="inline-flex p-3 rounded-xl bg-muted/50 mb-4">
-                  <stat.icon className="h-5 w-5 text-muted-foreground" />
+              <div className="relative bg-card backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                <div className={`inline-flex p-3 rounded-xl ${stat.bgColor} mb-4`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-1">
+                <div className={`text-3xl md:text-4xl font-bold ${stat.color} mb-1`}>
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
