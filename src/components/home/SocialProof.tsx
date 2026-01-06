@@ -21,10 +21,10 @@ const universities = [
 ];
 
 const stats = [
-  { value: "2M+", label: "Active Developers", icon: Users, color: "from-runbit-cyan to-runbit-blue" },
-  { value: "500+", label: "Companies", icon: Building2, color: "from-runbit-purple to-runbit-pink" },
-  { value: "50M+", label: "Lines Compiled", icon: Code2, color: "from-runbit-green to-runbit-cyan" },
-  { value: "180+", label: "Countries", icon: Globe, color: "from-runbit-pink to-runbit-purple" },
+  { value: "2M+", label: "Active Developers", icon: Users, bgColor: "bg-emerald-500", textColor: "text-emerald-500" },
+  { value: "500+", label: "Companies", icon: Building2, bgColor: "bg-violet-500", textColor: "text-violet-500" },
+  { value: "50M+", label: "Lines Compiled", icon: Code2, bgColor: "bg-cyan-500", textColor: "text-cyan-500" },
+  { value: "180+", label: "Countries", icon: Globe, bgColor: "bg-rose-500", textColor: "text-rose-500" },
 ];
 
 const SocialProof = () => {
@@ -62,12 +62,12 @@ const SocialProof = () => {
               className="group relative"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-runbit-purple/20 to-runbit-cyan/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:border-runbit-purple/30 transition-all duration-300 hover:-translate-y-1">
-                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${stat.color} mb-4`}>
+              <div className={`absolute inset-0 ${stat.bgColor}/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+              <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <div className={`inline-flex p-3 rounded-xl ${stat.bgColor} mb-4 shadow-lg`}>
                   <stat.icon className="h-5 w-5 text-white" />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-1">
+                <div className={`text-3xl md:text-4xl font-bold ${stat.textColor} mb-1`}>
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
